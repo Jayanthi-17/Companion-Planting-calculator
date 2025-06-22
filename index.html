@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Companion Planting Tool</title>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    document.getElementById('app').innerHTML = `
+      <style>
+        body {
+          font-family: 'Libre Baskerville', Georgia, serif;
+          background-color: #f8f5f0;
+          margin: 0;
+          padding: 20px;
+          color: #333;
+          line-height: 1.6;
+        }
+        .companion-tool {
+          max-width: 800px;
+          margin: 0 auto;
+          background: white;
+          border-radius: 5px;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+          overflow: hidden;
+          border: 1px solid #e0d6c2;
+        }
+        .tool-header {
+          background-color: #ad2a24;
+          color: white;
+          padding: 20px;
+          text-align: center;
+          border-bottom: 3px solid #8a221d;
+        }
+        .tool-header h1 {
+          margin: 0;
+          font-size: 28px;
+          font-weight: normal;
+        }
+        .tool-body {
+          padding: 25px;
+        }
+        .select-container {
+          margin-bottom: 25px;
+        }
+        label {
+          display: block;
+          margin-bottom: 8px;
+          font-size: 18px;
+          color: #555;
+        }
+        select {
+          width: 100%;
+          padding: 12px;
+          border: 1px solid #d4c9b1;
+          border-radius: 4px;
+          font-size: 16px;
+          font-family: inherit;
+          background-color: #fcfaf6;
+          color: #333;
+        }
+        select:focus {
+          outline: none;
+          border-color: #ad2a24;
+        }
+        .results {
+          display: none;
+          margin-top: 25px;
+          background-color: #f9f7f2;
+          border-radius: 4px;
+          padding: 20px;
+          border-left: 4px solid #D3D3D3;
+        }
+        .results.active {
+          display: block;
+        }
+        .companion-list {
+          margin: 15px 0 0;
+          padding: 0;
+          list-style: none;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+        .companion-list li {
+          background-color: white;
+          padding: 8px 15px;
+          border-radius: 20px;
+          border: 1px solid #e0d6c2;
+          font-size: 15px;
+        }
+        .no-results {
+          color: #777;
+          font-style: italic;
+        }
+        @media (max-width: 600px) {
+          .tool-body {
+            padding: 15px;
+          }
+          .tool-header h1 {
+            font-size: 24px;
+          }
+        }
+      </style>
+
+      <div class="companion-tool">
+        <div class="tool-header">
+          <h1>Companion Planting Guide</h1>
+        </div>
+        <div class="tool-body">
+          <div class="select-container">
+            <label for="vegetable-select">Select a Vegetable:</label>
+            <select id="vegetable-select">
+              <option value="">-- Choose a vegetable --</option>
+    
+              <option value="Beans (bush)">Beans (bush)</option>
+              <option value="Beans (pole)">Beans (pole)</option>
+              <option value="Beets">Beets</option>
+              <option value="Broccoli">Broccoli</option>
+              <option value="Cabbage">Cabbage</option>
+              <option value="Carrots">Carrots</option>
+              <option value="Corn">Corn</option>
+              <option value="Cucumbers">Cucumbers</option>
+              <option value="Lettuce">Lettuce</option>
+              <option value="Onions">Onions</option>
+              <option value="Peas">Peas</option>
+              <option value="Peppers">Peppers</option>
+              <option value="Potatoes">Potatoes</option>
+              <option value="Radishes">Radishes</option>
+              <option value="Spinach">Spinach</option>
+              <option value="Squash">Squash</option>
+              <option value="Tomatoes">Tomatoes</option>
+            </select>
+          </div>
+          <div id="results" class="results">
+            <h3>Companion Plants:</h3>
+            <ul class="companion-list" id="companion-list"></ul>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Updated companion planting data with all corrections
+    const companionData = {
+      "Beans (bush)": ["Lovage", "Nasturtium", "Rosemary", "Corn", "Sunflowers"],
+      "Beans (pole)": ["Lovage", "Nasturtium", "Rosemary", "Corn", "Sunflowers"],
+      "Beets": ["Bush beans", "Garlic", "Lettuce", "Onion family"],
+      "Broccoli": ["Alyssum", "Dill", "Chinese Cabbage", "Marigold", "Nasturtium", "Oregano", "Sage", "Thyme"],
+    //   "Brussels sprouts": ["Alyssum", "Dill", "Marigold", "Nasturtium", "Oregano", "Sage", "Thyme"],
+      "Cabbage": ["Chamomile", "Dill", "Garlic", "Nasturtium", "Onion", "Rosemary", "Sage", "Tansy", "Thyme"],
+      "Carrots": ["Chives","Leeks", "Onions", "Peas", "Radishes", "Rosemary", "Sage", "Savory"],
+    //   "Cauliflower": ["Beans", "Celery", "Onions", "Peas"],
+    //   "Celery": ["Beans", "Cabbage", "Leeks", "Onions", "Tomatoes"],
+      "Corn": ["Beans(pole)", "Cucumbers", "Dill", "Geranium","Peas", "Potatoes", "Squash","Sunflower"],
+      "Cucumbers": ["Beans(Pole)", "Corn", "Dill","Peas", "Nasturtium","Radishes","Oregano","Chilli pepper","Radish","Sunflowers","Tansy"],
+    //   "Eggplant": ["Beans", "Peppers", "Spinach"],
+      "Lettuce": ["Alyssum","Chives","Garlic", "Oregano","Peas", "Poached Egg", "Onions", "Radishes", "Thyme"],
+    //   "Melons": ["Corn", "Radishes"],
+      "Onions": ["Beets", "Cabbage", "Carrots", "Chard", "Lettuce", "Strawberry", "Tomatoes"],
+      "Peas": ["Alyssum", "Chives", "Corn", "Lettuce", "Mint", "Radish", "Spinach"],
+      "Peppers": ["Basil", "Chives","Cilantro","Dill","Leeks", "Onions", "Oregano","Rosemary"],
+      "Potatoes": ["Basil","Beans", "Calendula","Cilantro","Dill","Garlic","Horseradish", "Onion", "Tansy", "Peas"],
+      "Radishes": ["Bok Choi","Chervil","Collards","Lettuce","Nasturtium", "Peas", "Spinach"],
+      "Spinach": ["Beabs","Celery","Cilantro","Coreopsis", "Radish", "Peas"],
+      "Winter Squash": ["Beans","Borage","Calendula","Corn", "Lovage","Marigold","Nasturtium","Oregano","Radish","Tansy"],
+      "Pumpkins": ["Beans","Borage","Calendula","Corn", "Lovage","Marigold","Nasturtium","Oregano","Radish","Tansy"],
+      "Summer Squash": ["Buckwheat","Marigold","Nasturtium","Oregano","Radishes","Zinnia"],
+      "Zucchini": ["Buckwheat","Marigold","Nasturtium","Oregano","Radishes","Zinnia"],
+      "Tomatoes": ["Asparagus", "Basil", "Beans","Borage","Calendula", "Celery", "Marigold", "Parsley","Radish","Rosemary","Thyme"]
+    };
+
+    // Handle vegetable selection
+    document.getElementById('vegetable-select').addEventListener('change', function() {
+      const vegetable = this.value;
+      const resultsDiv = document.getElementById('results');
+      const companionList = document.getElementById('companion-list');
+      
+      if (vegetable && companionData[vegetable]) {
+        companionList.innerHTML = companionData[vegetable]
+          .map(plant => `<li>${plant}</li>`)
+          .join('');
+        resultsDiv.classList.add('active');
+      } else {
+        resultsDiv.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
