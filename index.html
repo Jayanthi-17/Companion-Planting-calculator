@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Companion Planting Tool</title>
 </head>
 <body>
@@ -10,7 +11,7 @@
   <script>
     document.getElementById('app').innerHTML = `
       <style>
-        body {
+        #companion-app {
           font-family: 'Libre Baskerville', Georgia, serif;
           background-color: #f8f5f0;
           margin: 0;
@@ -18,7 +19,7 @@
           color: #333;
           line-height: 1.6;
         }
-        .companion-tool {
+        #companion-app .companion-tool {
           max-width: 800px;
           margin: 0 auto;
           background: white;
@@ -27,31 +28,31 @@
           overflow: hidden;
           border: 1px solid #e0d6c2;
         }
-        .tool-header {
+        #companion-app .tool-header {
           background-color: #ad2a24;
           color: white;
           padding: 20px;
           text-align: center;
           border-bottom: 3px solid #8a221d;
         }
-        .tool-header h1 {
+        #companion-app .tool-header h1 {
           margin: 0;
           font-size: 28px;
           font-weight: normal;
         }
-        .tool-body {
+        #companion-app .tool-body {
           padding: 25px;
         }
-        .select-container {
+        #companion-app .select-container {
           margin-bottom: 25px;
         }
-        label {
+        #companion-app label {
           display: block;
           margin-bottom: 8px;
           font-size: 18px;
           color: #555;
         }
-        select {
+        #companion-app select {
           width: 100%;
           padding: 12px;
           border: 1px solid #d4c9b1;
@@ -60,12 +61,15 @@
           font-family: inherit;
           background-color: #fcfaf6;
           color: #333;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
         }
-        select:focus {
+        #companion-app select:focus {
           outline: none;
           border-color: #ad2a24;
         }
-        .results {
+        #companion-app .results {
           display: none;
           margin-top: 25px;
           background-color: #f9f7f2;
@@ -73,10 +77,10 @@
           padding: 20px;
           border-left: 4px solid #D3D3D3;
         }
-        .results.active {
+        #companion-app .results.active {
           display: block;
         }
-        .companion-list {
+        #companion-app .companion-list {
           margin: 15px 0 0;
           padding: 0;
           list-style: none;
@@ -84,92 +88,181 @@
           flex-wrap: wrap;
           gap: 10px;
         }
-        .companion-list li {
+        #companion-app .companion-list li {
           background-color: white;
           padding: 8px 15px;
           border-radius: 20px;
           border: 1px solid #e0d6c2;
           font-size: 15px;
         }
-        .no-results {
+        #companion-app .companion-list a {
+          color: #ad2a24;
+          text-decoration: none;
+          transition: color 0.2s;
+        }
+        #companion-app .companion-list a:hover {
+          color: #8a221d;
+          text-decoration: underline;
+        }
+        #companion-app .no-results {
           color: #777;
           font-style: italic;
         }
+        
+        /* Mobile-specific styles */
         @media (max-width: 600px) {
-          .tool-body {
+          #companion-app {
+            padding: 10px;
+          }
+          #companion-app .tool-body {
             padding: 15px;
           }
-          .tool-header h1 {
+          #companion-app .tool-header h1 {
             font-size: 24px;
+          }
+          #companion-app select {
+            padding: 10px;
+            font-size: 16px;
+          }
+          #companion-app .companion-list {
+            flex-direction: column;
+            gap: 8px;
+          }
+          #companion-app .companion-list li {
+            width: 100%;
+            box-sizing: border-box;
           }
         }
       </style>
 
-      <div class="companion-tool">
-        <div class="tool-header">
-          <h1>Companion Planting Guide</h1>
-        </div>
-        <div class="tool-body">
-          <div class="select-container">
-            <label for="vegetable-select">Select a Vegetable:</label>
-            <select id="vegetable-select">
-              <option value="">-- Choose a vegetable --</option>
-    
-              <option value="Beans (bush)">Beans (bush)</option>
-              <option value="Beans (pole)">Beans (pole)</option>
-              <option value="Beets">Beets</option>
-              <option value="Broccoli">Broccoli</option>
-              <option value="Cabbage">Cabbage</option>
-              <option value="Carrots">Carrots</option>
-              <option value="Corn">Corn</option>
-              <option value="Cucumbers">Cucumbers</option>
-              <option value="Lettuce">Lettuce</option>
-              <option value="Onions">Onions</option>
-              <option value="Peas">Peas</option>
-              <option value="Peppers">Peppers</option>
-              <option value="Potatoes">Potatoes</option>
-              <option value="Radishes">Radishes</option>
-              <option value="Spinach">Spinach</option>
-              <option value="Squash">Squash</option>
-              <option value="Tomatoes">Tomatoes</option>
-            </select>
+      <div id="companion-app">
+        <div class="companion-tool">
+          <div class="tool-header">
+            <h1>Companion Planting Guide</h1>
           </div>
-          <div id="results" class="results">
-            <h3>Companion Plants:</h3>
-            <ul class="companion-list" id="companion-list"></ul>
+          <div class="tool-body">
+            <div class="select-container">
+              <label for="vegetable-select">Select a Vegetable:</label>
+              <select id="vegetable-select">
+                <option value="">-- Choose a vegetable --</option>
+                <option value="Beans (bush)">Beans (bush)</option>
+                <option value="Beans (pole)">Beans (pole)</option>
+                <option value="Beets">Beets</option>
+                <option value="Broccoli">Broccoli</option>
+                <option value="Cabbage">Cabbage</option>
+                <option value="Carrots">Carrots</option>
+                <option value="Corn">Corn</option>
+                <option value="Cucumbers">Cucumbers</option>
+                <option value="Lettuce">Lettuce</option>
+                <option value="Onions">Onions</option>
+                <option value="Peas">Peas</option>
+                <option value="Peppers">Peppers</option>
+                <option value="Potatoes">Potatoes</option>
+                <option value="Radishes">Radishes</option>
+                <option value="Spinach">Spinach</option>
+                <option value="Tomatoes">Tomatoes</option>
+              </select>
+            </div>
+            <div id="results" class="results">
+              <h3>Companion Plants:</h3>
+              <ul class="companion-list" id="companion-list"></ul>
+            </div>
           </div>
         </div>
       </div>
     `;
 
-    // Updated companion planting data with all corrections
+    // Corrected companion planting data
     const companionData = {
-      "Beans (bush)": ["Lovage", "Nasturtium", "Rosemary", "Corn", "Sunflowers"],
-      "Beans (pole)": ["Lovage", "Nasturtium", "Rosemary", "Corn", "Sunflowers"],
-      "Beets": ["Bush beans", "Garlic", "Lettuce", "Onion family"],
-      "Broccoli": ["Alyssum", "Dill", "Chinese Cabbage", "Marigold", "Nasturtium", "Oregano", "Sage", "Thyme"],
-    //   "Brussels sprouts": ["Alyssum", "Dill", "Marigold", "Nasturtium", "Oregano", "Sage", "Thyme"],
-      "Cabbage": ["Chamomile", "Dill", "Garlic", "Nasturtium", "Onion", "Rosemary", "Sage", "Tansy", "Thyme"],
-      "Carrots": ["Chives","Leeks", "Onions", "Peas", "Radishes", "Rosemary", "Sage", "Savory"],
-    //   "Cauliflower": ["Beans", "Celery", "Onions", "Peas"],
-    //   "Celery": ["Beans", "Cabbage", "Leeks", "Onions", "Tomatoes"],
-      "Corn": ["Beans(pole)", "Cucumbers", "Dill", "Geranium","Peas", "Potatoes", "Squash","Sunflower"],
-      "Cucumbers": ["Beans(Pole)", "Corn", "Dill","Peas", "Nasturtium","Radishes","Oregano","Chilli pepper","Radish","Sunflowers","Tansy"],
-    //   "Eggplant": ["Beans", "Peppers", "Spinach"],
-      "Lettuce": ["Alyssum","Chives","Garlic", "Oregano","Peas", "Poached Egg", "Onions", "Radishes", "Thyme"],
-    //   "Melons": ["Corn", "Radishes"],
-      "Onions": ["Beets", "Cabbage", "Carrots", "Chard", "Lettuce", "Strawberry", "Tomatoes"],
-      "Peas": ["Alyssum", "Chives", "Corn", "Lettuce", "Mint", "Radish", "Spinach"],
-      "Peppers": ["Basil", "Chives","Cilantro","Dill","Leeks", "Onions", "Oregano","Rosemary"],
-      "Potatoes": ["Basil","Beans", "Calendula","Cilantro","Dill","Garlic","Horseradish", "Onion", "Tansy", "Peas"],
-      "Radishes": ["Bok Choi","Chervil","Collards","Lettuce","Nasturtium", "Peas", "Spinach"],
-      "Spinach": ["Beabs","Celery","Cilantro","Coreopsis", "Radish", "Peas"],
-      "Winter Squash": ["Beans","Borage","Calendula","Corn", "Lovage","Marigold","Nasturtium","Oregano","Radish","Tansy"],
-      "Pumpkins": ["Beans","Borage","Calendula","Corn", "Lovage","Marigold","Nasturtium","Oregano","Radish","Tansy"],
-      "Summer Squash": ["Buckwheat","Marigold","Nasturtium","Oregano","Radishes","Zinnia"],
-      "Zucchini": ["Buckwheat","Marigold","Nasturtium","Oregano","Radishes","Zinnia"],
-      "Tomatoes": ["Asparagus", "Basil", "Beans","Borage","Calendula", "Celery", "Marigold", "Parsley","Radish","Rosemary","Thyme"]
+      "Beans (bush)": ["Lovage", "Nasturtium", "Rosemary", "Corn", "Sunflower"],
+      "Beans (pole)": ["Lovage", "Nasturtium", "Rosemary", "Corn", "Sunflower"],
+      "Beets": ["Bush beans", "Garlic", "Lettuce", "Onion"],
+      "Broccoli": ["Alyssum", "Dill", "Cabbage", "Marigold", "Nasturtium", "Oregano", "Sage", "Thyme"],
+      "Cabbage": ["Chamomile", "Dill", "Garlic", "Nasturtium", "Onion", "Rosemary", "Sage", "Thyme"],
+      "Carrots": ["Chives", "Leeks", "Onion", "Peas", "Radish", "Rosemary", "Sage"],
+      "Corn": ["Beans", "Cucumber", "Dill", "Peas", "Potato", "Squash", "Sunflower"],
+      "Cucumbers": ["Beans", "Corn", "Dill", "Peas", "Nasturtium", "Radish", "Sunflower"],
+      "Lettuce": ["Alyssum", "Chives", "Garlic", "Onion", "Radish", "Strawberry"],
+      "Onions": ["Beet", "Cabbage", "Carrot", "Lettuce", "Strawberry", "Tomato"],
+      "Peas": ["Alyssum", "Carrot", "Corn", "Cucumber", "Radish", "Turnip"],
+      "Peppers": ["Basil", "Carrot", "Onion", "Oregano"],
+      "Potatoes": ["Beans", "Cabbage", "Corn", "Horseradish", "Marigold"],
+      "Radishes": ["Beans", "Carrot", "Cucumber", "Lettuce", "Peas", "Spinach"],
+      "Spinach": ["Beans", "Peas", "Strawberry"],
+      "Tomatoes": ["Basil", "Carrot", "Celery", "Onion", "Parsley", "Pepper"]
     };
+
+    // Corrected URL mapping for Almanac
+    const plantUrls = {
+      "Alyssum": "https://www.almanac.com/plant/sweet-alyssum",
+      "Basil": "https://www.almanac.com/plant/basil",
+      "Beans": "https://www.almanac.com/plant/beans",
+      "Beans (bush)": "https://www.almanac.com/plant/bush-beans",
+      "Beans (pole)": "https://www.almanac.com/plant/pole-beans",
+      "Beet": "https://www.almanac.com/plant/beets",
+      "Beets": "https://www.almanac.com/plant/beets",
+      "Bush beans": "https://www.almanac.com/plant/beans",
+      "Broccoli": "https://www.almanac.com/plant/broccoli",
+      "Cabbage": "https://www.almanac.com/plant/cabbage",
+      "Carrot": "https://www.almanac.com/plant/carrots",
+      "Carrots": "https://www.almanac.com/plant/carrots",
+      "Celery": "https://www.almanac.com/plant/celery",
+      "Chamomile": "https://www.almanac.com/plant/chamomile",
+      "Chives": "https://www.almanac.com/plant/chives",
+      "Corn": "https://www.almanac.com/plant/corn",
+      "Cucumber": "https://www.almanac.com/plant/cucumbers",
+      "Cucumbers": "https://www.almanac.com/plant/cucumbers",
+      "Dill": "https://www.almanac.com/plant/dill",
+      "Garlic": "https://www.almanac.com/plant/garlic",
+      "Horseradish": "https://www.almanac.com/plant/horseradish",
+      "Leeks": "https://www.almanac.com/plant/leeks",
+      "Lettuce": "https://www.almanac.com/plant/lettuce",
+      "Lovage": "https://www.almanac.com/plant/how-grow-lovage-plants-complete-herb-guide",
+      "Marigold": "https://www.almanac.com/plant/marigolds",
+      "Nasturtium": "https://www.almanac.com/plant/nasturtiums",
+      "Onion": "https://www.almanac.com/plant/onions",
+      "Onions": "https://www.almanac.com/plant/onions",
+      "Oregano": "https://www.almanac.com/plant/oregano",
+      "Parsley": "https://www.almanac.com/plant/parsley",
+      "Peas": "https://www.almanac.com/plant/peas",
+      "Pepper": "https://www.almanac.com/plant/bell-peppers",
+      "Peppers": "https://www.almanac.com/plant/jalapeno-peppers",
+      "Potato": "https://www.almanac.com/plant/potatoes",
+      "Potatoes": "https://www.almanac.com/plant/potatoes",
+      "Radish": "https://www.almanac.com/plant/radishes",
+      "Radishes": "https://www.almanac.com/plant/radishes",
+      "Rosemary": "https://www.almanac.com/plant/rosemary",
+      "Sage": "https://www.almanac.com/plant/sage",
+      "Spinach": "https://www.almanac.com/plant/spinach",
+      "Squash": "https://www.almanac.com/plant/zucchini",
+      "Strawberry": "https://www.almanac.com/plant/strawberries",
+      "Sunflower": "https://www.almanac.com/plant/sunflowers",
+      "Thyme": "https://www.almanac.com/plant/thyme",
+      "Tomato": "https://www.almanac.com/plant/tomatoes",
+      "Tomatoes": "https://www.almanac.com/plant/tomatoes",
+      "Turnip": "https://www.almanac.com/plant/turnips"
+    };
+
+    // Improved URL lookup with better fallbacks
+    function getPlantUrl(plantName) {
+      // First try exact match
+      if (plantUrls[plantName]) return plantUrls[plantName];
+      
+      // Try singular/plural variations
+      const singular = plantName.replace(/s$/, '');
+      if (plantUrls[singular]) return plantUrls[singular];
+      
+      // Try lowercase matching
+      const lowerPlant = plantName.toLowerCase();
+      for (const key in plantUrls) {
+        if (key.toLowerCase() === lowerPlant) {
+          return plantUrls[key];
+        }
+      }
+      
+      // Final fallback to Almanac search
+      return `https://www.almanac.com/search?search=${encodeURIComponent(plantName)}`;
+    }
 
     // Handle vegetable selection
     document.getElementById('vegetable-select').addEventListener('change', function() {
@@ -179,7 +272,10 @@
       
       if (vegetable && companionData[vegetable]) {
         companionList.innerHTML = companionData[vegetable]
-          .map(plant => `<li>${plant}</li>`)
+          .map(plant => {
+            const url = getPlantUrl(plant);
+            return `<li><a href="${url}" target="_blank" rel="noopener noreferrer">${plant}</a></li>`;
+          })
           .join('');
         resultsDiv.classList.add('active');
       } else {
